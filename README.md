@@ -50,13 +50,15 @@ APK output: `app/build/outputs/apk/debug/app-debug.apk`
 
 - Android 16 (API 36)
 - AnkiDroid installed with the ContentProvider enabled
+- "Display over other apps" permission granted (for headless start via intents)
 
 ## Usage
 
 1. Install the APK
-2. Grant notification permission when prompted
-3. The server starts automatically on port 18765
-4. From Termux or any local client:
+2. Launch the app once (required by Android to exit "stopped state")
+3. Grant notification permission and "Display over other apps" when prompted
+4. The server starts automatically on port 18765
+5. From Termux or any local client:
 
 ```python
 import requests
@@ -84,6 +86,43 @@ import base64
 data = base64.b64encode(open('audio.mp3', 'rb').read()).decode()
 actual_name = anki('storeMediaFile', filename='audio.mp3', data=data)
 ```
+
+## Headless Control (Intents)
+
+The server can be started and stopped without opening the app UI, useful for automation with Termux or Tasker.
+
+There are two approaches:
+- **Broadcast receiver** — works from foreground apps (like Termux where you're actively in a terminal)
+- **Direct service intent** — works from background contexts (like Tasker tasks triggered by events)
+
+Tasker must use the direct service approach because it sends intents from the background, where Android blocks broadcast receivers from starting foreground services.
+
+### Termux
+
+```bash
+# Start
+am broadcast -a com.jcbmarqz.ankidroidbridge.START_SERVER -n com.jcbmarqz.ankidroidbridge/.StartServerReceiver
+
+# Stop
+am broadcast -a com.jcbmarqz.ankidroidbridge.STOP_SERVER -n com.jcbmarqz.ankidroidbridge/.StopServerReceiver
+```
+
+### Tasker
+
+Use the **Send Intent** action with Target: **Service**:
+
+| Field | Start | Stop |
+|-------|-------|------|
+| Action | `com.jcbmarqz.ankidroidbridge.START_SERVER` | `com.jcbmarqz.ankidroidbridge.STOP_SERVER` |
+| Package | `com.jcbmarqz.ankidroidbridge` | `com.jcbmarqz.ankidroidbridge` |
+| Class | `com.jcbmarqz.ankidroidbridge.BridgeService` | `com.jcbmarqz.ankidroidbridge.BridgeService` |
+| Target | Service | Service |
+
+### Notes
+
+- Both intents are idempotent (start when running = no-op, stop when stopped = no-op)
+- The app must be launched manually once after install (Android restriction)
+- "Display over other apps" permission is required for background starts
 
 ## Note
 
