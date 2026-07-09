@@ -1,4 +1,4 @@
-package com.marqjaco.ankidroidbridge;
+package com.jcbmarqz.ankidroidbridge;
 
 import android.app.Notification;
 import android.app.NotificationChannel;
@@ -14,7 +14,7 @@ public class BridgeService extends Service {
 
     private static final String CHANNEL_ID = "bridge_service";
     public static final String EXTRA_PORT = "port";
-    public static final String ACTION_LOG = "com.marqjaco.ankidroidbridge.LOG";
+    public static final String ACTION_LOG = "com.jcbmarqz.ankidroidbridge.LOG";
     public static final String EXTRA_MESSAGE = "message";
 
     private BridgeServer server;
@@ -25,11 +25,13 @@ public class BridgeService extends Service {
         createNotificationChannel();
     }
 
-    public static final String ACTION_STOP = "com.marqjaco.ankidroidbridge.STOP";
+    public static final String ACTION_STOP = "com.jcbmarqz.ankidroidbridge.STOP";
+    public static final String ACTION_STOP_SERVER = "com.jcbmarqz.ankidroidbridge.STOP_SERVER";
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        if (ACTION_STOP.equals(intent != null ? intent.getAction() : null)) {
+        String action = intent != null ? intent.getAction() : null;
+        if (ACTION_STOP.equals(action) || ACTION_STOP_SERVER.equals(action)) {
             stopSelf();
             return START_NOT_STICKY;
         }

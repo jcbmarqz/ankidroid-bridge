@@ -3,11 +3,11 @@ plugins {
 }
 
 android {
-    namespace = "com.marqjaco.ankidroidbridge"
+    namespace = "com.jcbmarqz.ankidroidbridge"
     compileSdk = 36
 
     defaultConfig {
-        applicationId = "com.marqjaco.ankidroidbridge"
+        applicationId = "com.jcbmarqz.ankidroidbridge"
         minSdk = 36
         targetSdk = 36
         versionCode = 1

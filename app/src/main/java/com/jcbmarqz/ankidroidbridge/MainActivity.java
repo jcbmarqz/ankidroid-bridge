@@ -1,4 +1,4 @@
-package com.marqjaco.ankidroidbridge;
+package com.jcbmarqz.ankidroidbridge;
 
 import android.Manifest;
 import android.app.ActivityManager;

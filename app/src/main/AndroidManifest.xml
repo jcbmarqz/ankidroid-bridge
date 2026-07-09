@@ -6,6 +6,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE_SPECIAL_USE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission android:name="com.ichi2.anki.permission.READ_WRITE_DATABASE" />
 
     <queries>
@@ -33,10 +34,31 @@
             </intent-filter>
         </activity>
 
+        <receiver
+            android:name=".StartServerReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.jcbmarqz.ankidroidbridge.START_SERVER" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name=".StopServerReceiver"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.jcbmarqz.ankidroidbridge.STOP_SERVER" />
+            </intent-filter>
+        </receiver>
+
         <service
             android:name=".BridgeService"
             android:foregroundServiceType="specialUse"
-            android:exported="false" />
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.jcbmarqz.ankidroidbridge.START_SERVER" />
+                <action android:name="com.jcbmarqz.ankidroidbridge.STOP_SERVER" />
+            </intent-filter>
+        </service>
 
         <provider
             android:name="androidx.core.content.FileProvider"

@@ -1,4 +1,4 @@
-package com.marqjaco.ankidroidbridge
+package com.jcbmarqz.ankidroidbridge
 
 import org.junit.Test
 
